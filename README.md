@@ -1,20 +1,35 @@
 # Guia de responsividade com Vue
 
-Projeto acadêmico em dupla. O guia ensina responsividade com exemplos comentados, perguntas respondidas e experimentos interativos.
+Projeto acadêmico em dupla, desenvolvido com Vue 3, Vue Router, Pinia e Vite.
 
-## Estrutura prevista
+## Estado atual
 
-| Rota | Conteúdo |
-| --- | --- |
-| `/` | Índice do guia |
-| `/responsividade` | Por que responsividade importa |
-| `/unidades-css` | Unidades CSS |
-| `/flexbox-grid` | Flexbox e Grid |
-| `/imagens-responsivas` | Imagens responsivas |
-| `/boas-praticas-vue` | Boas práticas em projetos Vue |
-| `/desafio` | Pergunta final baseada no próprio guia |
+A trilha inicial está navegável. O menu mostra uma prévia animada de cada lição e registra no navegador quais lições foram visitadas. As páginas das lições já exibem as perguntas-guia. O conteúdo completo, os laboratórios e a pergunta do Desafio estão em desenvolvimento.
 
-Cada uma das cinco lições tem uma explicação curta, um exemplo de código comentado, a resposta à pergunta-guia e fontes consultadas ao final. Pelo menos três laboratórios serão incorporados às lições.
+## Executar localmente
+
+Use Node.js 22 a partir da versão 22.18 ou Node.js 24.12 ou superior. Na pasta do projeto, execute:
+
+```bash
+npm ci
+npm run dev
+```
+
+Abra o endereço indicado pelo Vite no terminal. Para gerar a versão de produção, execute `npm run build`.
+
+## Rotas
+
+| Rota                   | Conteúdo                               |
+| ---------------------- | -------------------------------------- |
+| `/`                    | Índice do guia                         |
+| `/responsividade`      | Por que responsividade importa         |
+| `/unidades-css`        | Unidades CSS                           |
+| `/flexbox-grid`        | Flexbox e Grid                         |
+| `/imagens-responsivas` | Imagens responsivas                    |
+| `/boas-praticas-vue`   | Boas práticas em projetos Vue          |
+| `/desafio`             | Pergunta final baseada no próprio guia |
+
+Cada uma das cinco lições terá uma explicação curta, um exemplo de código comentado, a resposta à pergunta-guia e as fontes consultadas. Pelo menos três laboratórios serão incorporados às lições.
 
 O enunciado menciona seis seções, enumera cinco temas e pede a página Desafio separadamente. O projeto considera as cinco lições e a página Desafio como as seis telas exigidas. O índice facilita a navegação.
 
@@ -22,9 +37,10 @@ O enunciado menciona seis seções, enumera cinco temas e pede a página Desafio
 
 - `src/views/` — páginas do guia.
 - `src/router/` — rotas e carregamento sob demanda.
-- `src/components/` — navegação, estrutura das lições e código comentado.
-- `src/components/labs/` — experimentos interativos.
-- `src/assets/` — estilos globais, variáveis CSS e imagens.
+- `src/components/` reúne os ícones e as ilustrações das prévias.
+- `src/data/` reúne os dados usados na trilha e nas rotas das lições.
+- `src/stores/` controla o progresso com Pinia.
+- `src/assets/` reúne os estilos, as variáveis CSS e as imagens.
 
 ## Regras de implementação
 
