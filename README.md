@@ -4,7 +4,7 @@ Projeto acadêmico em dupla, desenvolvido com Vue 3, Vue Router, Pinia e Vite.
 
 ## Estado atual
 
-A trilha inicial está navegável. O menu mostra uma prévia animada de cada lição e registra no navegador quais lições foram visitadas. As páginas das lições já exibem as perguntas-guia. O conteúdo completo, os laboratórios e a pergunta do Desafio estão em desenvolvimento.
+A trilha inicial está navegável. O menu mostra uma prévia animada de cada lição e registra no navegador quais lições foram visitadas. A lição de Responsividade está completa e inclui um laboratório sobre a meta viewport. As demais lições e o Desafio estão em desenvolvimento.
 
 ## Executar localmente
 
@@ -37,7 +37,8 @@ O enunciado menciona seis seções, enumera cinco temas e pede a página Desafio
 
 - `src/views/` — páginas do guia.
 - `src/router/` — rotas e carregamento sob demanda.
-- `src/components/` reúne os ícones e as ilustrações das prévias.
+- `src/components/` reúne os componentes reutilizáveis, incluindo a navegação das lições, os ícones e as ilustrações das prévias.
+- `src/lessons/` agrupa cada tema em sua própria pasta, com exemplos, diagramas e laboratórios.
 - `src/data/` reúne os dados usados na trilha e nas rotas das lições.
 - `src/stores/` controla o progresso com Pinia.
 - `src/assets/` reúne os estilos, as variáveis CSS e as imagens.
