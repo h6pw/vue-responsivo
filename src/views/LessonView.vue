@@ -2,8 +2,10 @@
 import { computed, watch } from 'vue'
 import { RouterLink } from 'vue-router'
 import FlexGridLesson from '@/lessons/flexbox-grid/FlexGridLesson.vue'
+import ResponsiveImagesLesson from '@/lessons/imagens-responsivas/ResponsiveImagesLesson.vue'
 import ResponsivenessLesson from '@/lessons/responsividade/ResponsivenessLesson.vue'
 import UnitsLesson from '@/lessons/unidades-css/UnitsLesson.vue'
+import VueBestPracticesLesson from '@/lessons/boas-praticas-vue/VueBestPracticesLesson.vue'
 import { useProgressStore } from '@/stores/progress'
 import '@/assets/lesson.css'
 
@@ -11,6 +13,8 @@ const lessonContent = {
   responsividade: ResponsivenessLesson,
   'unidades-css': UnitsLesson,
   'flexbox-grid': FlexGridLesson,
+  'imagens-responsivas': ResponsiveImagesLesson,
+  'boas-praticas-vue': VueBestPracticesLesson,
 }
 
 const props = defineProps({

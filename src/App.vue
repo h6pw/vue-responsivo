@@ -1,6 +1,7 @@
 <script setup>
 import { ref } from 'vue'
 import { RouterLink, RouterView } from 'vue-router'
+import BreakpointIndicator from '@/components/BreakpointIndicator.vue'
 import githubMark from '@/assets/github-mark.svg'
 import './assets/guide.css'
 
@@ -59,4 +60,5 @@ function dismissMenu() {
       </ul>
     </div>
   </footer>
+  <BreakpointIndicator />
 </template>
