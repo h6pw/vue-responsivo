@@ -1,4 +1,5 @@
 <script setup>
+import LessonCode from '@/components/LessonCode.vue'
 import LessonSections from '@/components/LessonSections.vue'
 import ViewportDiagram from './ViewportDiagram.vue'
 import ViewportLab from './ViewportLab.vue'
@@ -9,10 +10,12 @@ defineProps({
   routeName: { type: String, required: true },
 })
 
-const htmlExample = `<!-- No <head>, ajuste o viewport. -->
+const htmlExample = `<!-- A opção Meta viewport do laboratório inclui ou remove esta tag.
+     width=device-width usa a largura do aparelho. -->
 ${viewportTag}
 
-<!-- No <body>, use o mesmo HTML em qualquer largura. -->
+<!-- Os mesmos três cartões aparecem em qualquer dispositivo.
+     O CSS abaixo decide quantas colunas cabem. -->
 <div class="catalogo">
   <article>Introdução</article>
   <article>Layout</article>
@@ -71,18 +74,13 @@ const sources = [
     </template>
     <template #exemplo>
       <p>
-        O exemplo começa com uma coluna. A partir de <code>40rem</code>, o catálogo ganha três
-        colunas.
+        No laboratório, compare Celular e Tablet e observe a leitura <strong>Catálogo</strong>.
+        Depois volte para Celular e desmarque Meta viewport. O CSS recebe uma largura diferente e a
+        mesma regra pode ativar três colunas.
       </p>
       <div class="lesson-code-grid">
-        <figure>
-          <figcaption>HTML</figcaption>
-          <pre><code>{{ htmlExample }}</code></pre>
-        </figure>
-        <figure>
-          <figcaption>CSS</figcaption>
-          <pre><code>{{ responsiveLayout }}</code></pre>
-        </figure>
+        <LessonCode title="HTML · Meta viewport e cartões" :source="htmlExample" />
+        <LessonCode title="CSS · Colunas do catálogo" :source="responsiveLayout" />
       </div>
       <ViewportLab />
     </template>

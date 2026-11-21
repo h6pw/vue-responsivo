@@ -4,7 +4,7 @@ Projeto acadêmico em dupla, desenvolvido com Vue 3, Vue Router, Pinia e Vite.
 
 ## Estado atual
 
-A trilha inicial está navegável. O menu mostra uma prévia animada de cada lição e registra no navegador quais lições foram visitadas. A lição de Responsividade está completa e inclui um laboratório sobre a meta viewport. As demais lições e o Desafio estão em desenvolvimento.
+A trilha inicial está navegável. O menu mostra uma prévia animada de cada lição e registra no navegador quais lições foram visitadas. A lição de Responsividade está completa e inclui um laboratório sobre a meta viewport. A lição de Unidades CSS inclui um laboratório de tipografia e layout, com o CSS aplicado à prévia. A lição de Flexbox e Grid inclui um laboratório para comparar os dois layouts. As demais lições e o Desafio estão em desenvolvimento.
 
 ## Executar localmente
 

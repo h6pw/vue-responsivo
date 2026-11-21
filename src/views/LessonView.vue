@@ -1,12 +1,16 @@
 <script setup>
 import { computed, watch } from 'vue'
 import { RouterLink } from 'vue-router'
+import FlexGridLesson from '@/lessons/flexbox-grid/FlexGridLesson.vue'
 import ResponsivenessLesson from '@/lessons/responsividade/ResponsivenessLesson.vue'
+import UnitsLesson from '@/lessons/unidades-css/UnitsLesson.vue'
 import { useProgressStore } from '@/stores/progress'
 import '@/assets/lesson.css'
 
 const lessonContent = {
   responsividade: ResponsivenessLesson,
+  'unidades-css': UnitsLesson,
+  'flexbox-grid': FlexGridLesson,
 }
 
 const props = defineProps({

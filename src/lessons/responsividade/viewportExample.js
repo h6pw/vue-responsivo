@@ -4,14 +4,16 @@ export const viewportTag = `<meta
 >`
 export const wideViewportRem = 40
 
-export const responsiveLayout = `/* Mobile-first: uma coluna é o padrão. */
+export const responsiveLayout = `/* Celular com Meta viewport: a largura fica abaixo de 40rem.
+   O catálogo começa com os cartões empilhados em uma coluna. */
 .catalogo {
   display: grid;
   grid-template-columns: 1fr;
   gap: 0.75rem;
 }
 
-/* Se o viewport for largo, use três colunas. */
+/* A regra usa a leitura “Viewport CSS” do laboratório.
+   A partir de 40rem, a leitura “Catálogo” mostra 3 colunas. */
 @media (min-width: ${wideViewportRem}rem) {
   .catalogo {
     grid-template-columns: repeat(3, 1fr);
