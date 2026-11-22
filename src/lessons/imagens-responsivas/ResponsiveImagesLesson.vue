@@ -157,37 +157,29 @@ const sources = [
       <div class="answer-box">
         <h3>Por que o texto é empurrado para baixo?</h3>
         <p>
-          Quando a tag <code>&lt;img&gt;</code> não possui os atributos <code>width</code> e
-          <code>height</code> (nem a propriedade CSS <code>aspect-ratio</code>), o navegador calcula
-          inicialmente que a imagem ocupa <strong>0 pixel de altura</strong>. Ele desenha a página
-          colocando o texto imediatamente após o título.
-        </p>
-        <p>
-          Segundos depois, quando os bytes da imagem finalmente terminam de baixar pela rede, o
-          navegador descobre as dimensões reais da imagem e precisa recalcular todo o layout da
-          página (processo chamado de <em>reflow</em>). A imagem se expande de repente e
-          <strong>empurra violentamente o texto e os botões para baixo</strong>.
+          Se o HTML ou o CSS não informa o tamanho ou a proporção da imagem, o navegador pode exibir
+          o texto sem reservar altura suficiente para ela. Quando descobre as dimensões do arquivo,
+          recalcula o layout e pode deslocar o conteúdo abaixo.
         </p>
 
         <div class="lesson-viewport-comparison">
-          <div class="lesson-viewport-case">
+          <div class="lesson-viewport-case image-spacing-case">
             <div>
               <h3>Sem width e height</h3>
               <p class="lesson-case-width">Sem espaço antes do carregamento</p>
               <p>
-                O usuário já começou a ler ou ia clicar em um link. De repente, a imagem aparece, o
-                link se move de lugar e a pessoa clica onde não queria. Experiência frustrante!
+                Se a imagem ganha altura quando carrega, o texto e os links abaixo mudam de posição.
               </p>
             </div>
           </div>
-          <div class="lesson-viewport-case">
+          <div class="lesson-viewport-case image-spacing-case">
             <div>
               <h3>Com width e height (ou aspect-ratio)</h3>
-              <p class="lesson-case-width">Altura calculada: espaço reservado desde o 1º ms</p>
+              <p class="lesson-case-width">Espaço reservado antes de a imagem aparecer</p>
               <p>
-                O navegador usa <code>width="1200" height="800"</code> para deduzir que a proporção
-                é 3:2. Ele reserva uma caixa vazia exatamente nessa proporção. Quando o arquivo
-                chega, preenche o espaço sem mover uma única linha de texto.
+                Com <code>width="1200" height="800"</code>, o navegador pode reservar uma caixa na
+                proporção 3:2. Se o arquivo tiver essa proporção, a imagem preenche a caixa sem
+                deslocar o texto abaixo.
               </p>
             </div>
           </div>
@@ -205,12 +197,11 @@ const sources = [
             mudança de posição.
           </p>
           <ul>
-            <li><strong>Bom (Aprovado):</strong> CLS menor ou igual a <code>0.1</code>.</li>
-            <li><strong>Precisa melhorar:</strong> entre <code>0.1</code> e <code>0.25</code>.</li>
+            <li><strong>Bom</strong> até <code>0.1</code>.</li>
             <li>
-              <strong>Ruim:</strong> acima de <code>0.25</code> (causa penalização no ranking de
-              busca do Google).
+              <strong>Precisa melhorar</strong> acima de <code>0.1</code> e até <code>0.25</code>.
             </li>
+            <li><strong>Ruim</strong> acima de <code>0.25</code>.</li>
           </ul>
         </div>
       </div>
@@ -231,6 +222,9 @@ const sources = [
 </template>
 
 <style scoped>
+.image-spacing-case {
+  grid-template-columns: minmax(0, 1fr);
+}
 .fit-visual-comparison {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 8.5rem), 1fr));
