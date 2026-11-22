@@ -147,7 +147,7 @@ const sources = [
         />
       </div>
 
-      <div class="token-code-single">
+      <div class="lesson-code-grid token-code-single">
         <LessonCode title="CSS · Variáveis no :root como Design Tokens" :source="tokensExample" />
       </div>
 
@@ -159,60 +159,31 @@ const sources = [
       <p class="lesson-question">{{ question }}</p>
 
       <div class="answer-box">
-        <h3>O que acontece com o texto digitado?</h3>
+        <h3>O que acontece com a anotação do Gato?</h3>
         <p>
-          O texto digitado pela pessoa no campo do segundo animal parecerá
-          <strong>"pular" e ficar associado ao animal errado</strong> (ele permanecerá no campo do
-          primeiro animal restante da lista, enquanto o campo do último animal desaparecerá da
-          tela).
+          Digite “vacina” no segundo campo e remova o Cachorro. O resultado depende de como o Vue
+          identifica cada linha.
         </p>
-
-        <h3>Por que essa falha bizarra acontece?</h3>
-        <p>
-          Isso acontece por causa do funcionamento interno do algoritmo de reconciliação do
-          <strong>Virtual DOM do Vue</strong>:
-        </p>
-
         <div class="lesson-viewport-comparison">
-          <div class="lesson-viewport-case">
-            <div>
-              <h3>Sem :key (ou com :key="index")</h3>
-              <p class="lesson-case-width">Estratégia in-place patch (reaproveitamento cego)</p>
-              <p>
-                Quando não há chave única, o Vue adota a estratégia de "atualização no local". Ao
-                remover o primeiro animal da lista em memória, o array passa de 3 para 2 itens. O
-                Vue simplesmente pega o primeiro elemento DOM que já existia na tela e atualiza seu
-                texto para "Gato", e em seguida descarta o 3º elemento DOM.
-              </p>
-              <p>
-                Porém, o texto que o usuário digitou dentro do <code>&lt;input&gt;</code> é um
-                <strong>estado interno temporário do nó do navegador real</strong>. Como o primeiro
-                nó DOM não foi destruído (apenas reaproveitado), ele continua exibindo o texto que
-                já estava nele, enquanto o verdadeiro input onde o usuário digitou foi descartado ou
-                deslocado!
-              </p>
-            </div>
-          </div>
-
-          <div class="lesson-viewport-case">
-            <div>
-              <h3>Com :key="animal.id" (Identificador único)</h3>
-              <p class="lesson-case-width">Rastreamento estável de identidade</p>
-              <p>
-                Ao fornecer uma chave única que pertence aos dados (como o ID do banco de dados ou
-                um UUID), o Vue sabe exatamente qual nó do Virtual DOM corresponde a qual elemento
-                do DOM real.
-              </p>
-              <p>
-                Quando o primeiro animal é removido, o Vue busca o nó com <code>id="c1"</code> e
-                remove exatamente aquele elemento da tela. O nó com <code>id="g2"</code> (o Gato)
-                sobe de posição intacto, mantendo seu campo de texto, foco e anotações exatamente
-                como o usuário deixou!
-              </p>
-            </div>
-          </div>
+          <figure class="lesson-figure">
+            <figcaption>Sem chave estável</figcaption>
+            <p>Gato · campo vazio</p>
+            <p>Papagaio · <strong>vacina</strong></p>
+            <p>
+              O Vue reaproveita os campos por posição. A anotação continua no segundo campo, agora
+              associado ao Papagaio.
+            </p>
+          </figure>
+          <figure class="lesson-figure">
+            <figcaption>Com <code>:key="animal.id"</code></figcaption>
+            <p>Gato · <strong>vacina</strong></p>
+            <p>Papagaio · campo vazio</p>
+            <p>
+              O Vue identifica as linhas pelo ID. A anotação acompanha o Gato quando ele sobe para a
+              primeira posição.
+            </p>
+          </figure>
         </div>
-
         <div class="core-vitals-summary">
           <h4>Resumo das Boas Práticas e Core Web Vitals no Vue 3</h4>
           <div class="vitals-pills">
@@ -257,6 +228,8 @@ const sources = [
 
 <style scoped>
 .folder-tree {
+  min-inline-size: 0;
+  overflow-wrap: anywhere;
   display: grid;
   gap: var(--space-1);
   text-align: left;
@@ -289,6 +262,7 @@ const sources = [
 
 .token-code-single {
   margin-block: var(--space-3);
+  grid-template-columns: minmax(0, 1fr);
 }
 
 .answer-box {

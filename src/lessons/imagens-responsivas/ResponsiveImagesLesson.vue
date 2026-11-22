@@ -72,9 +72,9 @@ const sources = [
               <dt>loading="lazy" (e quando NÃO usar)</dt>
               <dd>
                 Adia o download de imagens distantes até que a pessoa role perto delas.
-                <strong>Cuidado:</strong> nunca use <code>loading="lazy"</code> na primeira imagem
-                do topo da página (imagem principal / LCP), pois isso atrasaria a renderização do
-                conteúdo principal.
+                <strong>Cuidado:</strong> evite <code>loading="lazy"</code> na imagem principal
+                visível ao abrir a página do topo da página (imagem principal / LCP), pois isso
+                atrasaria a renderização do conteúdo principal.
               </dd>
             </div>
             <div>
@@ -173,7 +173,7 @@ const sources = [
           <div class="lesson-viewport-case">
             <div>
               <h3>Sem width e height</h3>
-              <p class="lesson-case-width">Altura inicial: 0 px → Pula para 400 px</p>
+              <p class="lesson-case-width">Sem espaço antes do carregamento</p>
               <p>
                 O usuário já começou a ler ou ia clicar em um link. De repente, a imagem aparece, o
                 link se move de lugar e a pessoa clica onde não queria. Experiência frustrante!
@@ -200,8 +200,9 @@ const sources = [
             <span class="metric-sub">(Deslocamento Cumulativo de Layout)</span>
           </div>
           <p>
-            O <strong>CLS</strong> mede a soma de todas as pontuações de mudanças repentinas de
-            layout que ocorrem durante a navegação.
+            O <strong>CLS</strong> mede a estabilidade visual. Ele considera o grupo de mudanças
+            inesperadas de layout com a maior pontuação durante a visita. O laboratório ilustra uma
+            mudança de posição.
           </p>
           <ul>
             <li><strong>Bom (Aprovado):</strong> CLS menor ou igual a <code>0.1</code>.</li>

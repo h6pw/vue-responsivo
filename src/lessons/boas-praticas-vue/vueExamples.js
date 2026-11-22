@@ -20,9 +20,10 @@ const emit = defineEmits(['remover', 'editar'])
 <template>
   <article class="animal-card" :class="{ 'is-destacado': destacado }">
     <h3>{{ animal.nome }}</h3>
-    <!-- Campo de anotação com v-model para vincular ao estado do item -->
+    <!-- A edição é comunicada ao componente pai por evento -->
     <input
-      v-model="animal.anotacao"
+      :value="animal.anotacao"
+      @input="emit('editar', animal.id, $event.target.value)"
       type="text"
       placeholder="Escreva algo sobre este animal..."
     />

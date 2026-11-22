@@ -11,7 +11,7 @@ const questions = [
       'No nosso laboratório de Grid (com repeat(auto-fit, minmax(14rem, 1fr)), gap de 1rem e 1rem = 16px), a partir de qual largura interna do contêiner os 3 cartões cabem juntos na mesma linha (3 colunas)?',
     hint: 'Dica: cada coluna precisa de 14rem (224px) e existem 2 vãos (gaps) de 16px entre 3 colunas. Faça a soma!',
     options: [
-      { text: '688 px (224 + 16 + 224 + 16 + 224 - 1)', correct: false },
+      { text: '688 px (três colunas e apenas um vão)', correct: false },
       { text: '704 px (224 + 16 + 224 + 16 + 224)', correct: true },
       { text: '672 px (apenas 3 colunas sem os vãos)', correct: false },
       { text: '720 px (com margens externas adicionais)', correct: false },
@@ -24,7 +24,7 @@ const questions = [
     topic: 'Laboratório de Imagens',
     title: 'Eliminando o Salto de Layout',
     question:
-      'No laboratório de Imagens responsivas, qual combinação técnica garante que o texto abaixo da foto não seja empurrado para baixo (CLS = 0.00) enquanto o arquivo baixa?',
+      'No laboratório de Imagens responsivas, qual combinação técnica reserva espaço para a foto e evita que sua chegada empurre o texto?',
     hint: 'Pense em como o navegador calcula a proporção antes do download começar.',
     options: [
       { text: 'Adicionar apenas loading="lazy" na imagem', correct: false },
@@ -36,18 +36,18 @@ const questions = [
       { text: 'Retirar os atributos width e height para deixar a imagem livre', correct: false },
     ],
     explanation:
-      'Perfeito! Com width e height no HTML, o navegador calcula o aspect-ratio intrínseco e reserva a caixa vazia exata antes da imagem chegar!',
+      'Perfeito! Com width e height no HTML, o navegador calcula o proporção indicada pelas dimensões e reserva espaço antes da imagem chegar. Os atributos devem corresponder à proporção do arquivo.',
   },
   {
     id: 3,
     topic: 'Laboratório de Boas Práticas Vue',
     title: 'O Enigma do :key no v-for',
     question:
-      'Ao remover o primeiro item de uma lista com inputs de texto renderizada com v-for sem :key, por que a anotação digitada no 2º item pareceu "subir" para o 1º item?',
+      'Ao remover o primeiro item de uma lista com inputs de texto renderizada com v-for sem :key, por que, no laboratório, a anotação digitada no campo do Gato aparece na linha do Papagaio?',
     hint: 'Lembre-se da estratégia in-place patch do Virtual DOM.',
     options: [
       {
-        text: 'Porque o Vue reaproveitou o 1º nó DOM existente in-place, mantendo seu input, e apenas destruiu o último nó DOM',
+        text: 'Porque o Vue reaproveitou os campos por posição. O segundo campo conservou o texto e passou a exibir o Papagaio.',
         correct: true,
       },
       { text: 'Porque o JavaScript perdeu a referência da memória RAM', correct: false },
@@ -112,7 +112,7 @@ const isAllCompleted = computed(() => {
         <span class="badge-star">🏆</span>
         <div>
           <strong>Parabéns! Desafio Concluído!</strong>
-          <p>Você explorou todos os laboratórios e dominou as regras de responsividade.</p>
+          <p>Você respondeu às três questões. Confira o resultado e revise as explicações.</p>
         </div>
       </div>
     </div>
@@ -135,7 +135,7 @@ const isAllCompleted = computed(() => {
         <p class="question-text">{{ q.question }}</p>
         <p class="question-hint">💡 {{ q.hint }}</p>
 
-        <div class="options-group" role="radiogroup">
+        <div class="options-group" role="group" :aria-label="q.title">
           <button
             v-for="(opt, optIndex) in q.options"
             :key="optIndex"
@@ -146,6 +146,7 @@ const isAllCompleted = computed(() => {
               'is-right-answer': submitted[q.id] && opt.correct,
               'is-wrong-answer': submitted[q.id] && userAnswers[q.id] === optIndex && !opt.correct,
             }"
+            :aria-pressed="userAnswers[q.id] === optIndex"
             :disabled="submitted[q.id]"
             @click="selectOption(q.id, optIndex)"
           >

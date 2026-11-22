@@ -1,57 +1,39 @@
-# Guia de responsividade com Vue
+# Guia interativo de responsividade com Vue 3
 
-Projeto acadêmico em dupla, desenvolvido com Vue 3, Vue Router, Pinia e Vite.
+Projeto acadêmico em dupla para estudar como páginas web se adaptam a diferentes telas. Cada lição reúne explicações visuais, exemplos comentados, um laboratório interativo, uma pergunta-guia respondida e referências.
 
-## Estado atual
+[**Acessar o guia**](https://h6pw.github.io/vue-responsivo/)
 
-A trilha inicial está navegável. O menu mostra uma prévia animada de cada lição e registra no navegador quais lições foram visitadas. A lição de Responsividade está completa e inclui um laboratório sobre a meta viewport. A lição de Unidades CSS inclui um laboratório de tipografia e layout, com o CSS aplicado à prévia. A lição de Flexbox e Grid inclui um laboratório para comparar os dois layouts. As demais lições e o Desafio estão em desenvolvimento.
+## O que você pode explorar
 
-## Executar localmente
+| Módulo               | Prática                                                                                                                     |
+| -------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| Responsividade       | Compare telas com e sem a meta viewport e observe quando o catálogo muda de coluna.                                         |
+| Unidades CSS         | Altere a fonte raiz e as dimensões do painel para comparar unidades como `px`, `rem`, `em`, `%`, `vw` e `fr`.               |
+| Flexbox e Grid       | Ajuste alinhamento, quebra de linha, largura e espaçamento enquanto acompanha o CSS aplicado.                               |
+| Imagens responsivas  | Compare a reserva de espaço, explore recortes e teste como `srcset` oferece diferentes resoluções.                          |
+| Boas práticas em Vue | Veja o efeito de `:key` nos campos de uma lista, explore Core Web Vitals e experimente os efeitos de alterar design tokens. |
+| Desafio final        | Responda a três questões dos laboratórios e confira a pontuação e as explicações.                                           |
 
-Use Node.js 22 a partir da versão 22.18 ou Node.js 24.12 ou superior. Na pasta do projeto, execute:
+## Tecnologias
+
+Vue 3, Vue Router, Pinia, Vite e CSS. A navegação usa rotas com hash para que links diretos funcionem no GitHub Pages. O progresso das lições fica no navegador.
+
+## Como executar localmente
+
+Use Node.js 22.18 ou mais recente da série 22, ou Node.js 24.12 ou superior.
 
 ```bash
 npm ci
 npm run dev
 ```
 
-Abra o endereço indicado pelo Vite no terminal. Para gerar a versão de produção, execute `npm run build`.
-
-## Rotas
-
-| Rota                   | Conteúdo                               |
-| ---------------------- | -------------------------------------- |
-| `/`                    | Índice do guia                         |
-| `/responsividade`      | Por que responsividade importa         |
-| `/unidades-css`        | Unidades CSS                           |
-| `/flexbox-grid`        | Flexbox e Grid                         |
-| `/imagens-responsivas` | Imagens responsivas                    |
-| `/boas-praticas-vue`   | Boas práticas em projetos Vue          |
-| `/desafio`             | Pergunta final baseada no próprio guia |
-
-Cada uma das cinco lições terá uma explicação curta, um exemplo de código comentado, a resposta à pergunta-guia e as fontes consultadas. Pelo menos três laboratórios serão incorporados às lições.
-
-O enunciado menciona seis seções, enumera cinco temas e pede a página Desafio separadamente. O projeto considera as cinco lições e a página Desafio como as seis telas exigidas. O índice facilita a navegação.
+Abra a URL exibida pelo Vite. Para gerar e conferir o build de produção, execute `npm run build` e `npm run preview`.
 
 ## Organização do código
 
-- `src/views/` — páginas do guia.
-- `src/router/` — rotas e carregamento sob demanda.
-- `src/components/` reúne os componentes reutilizáveis, incluindo a navegação das lições, os ícones e as ilustrações das prévias.
-- `src/lessons/` agrupa cada tema em sua própria pasta, com exemplos, diagramas e laboratórios.
-- `src/data/` reúne os dados usados na trilha e nas rotas das lições.
-- `src/stores/` controla o progresso com Pinia.
-- `src/assets/` reúne os estilos, as variáveis CSS e as imagens.
-
-## Regras de implementação
-
-- Gerar o projeto com `npm create vue@latest`, usando Vue 3, Vite e Vue Router.
-- Usar CSS mobile-first, media queries com `min-width`, fontes e espaçamentos em `rem`, e cores e espaçamentos como variáveis CSS em `:root`.
-- Exibir um botão de menu no celular e conferir o layout sem rolagem horizontal.
-- Publicar o guia e validar a navegação em um celular.
-
-## Entrega
-
-- Apresentação em 01/12/2026.
-- Entrega em 22/12/2026, às 23h59, pelos dois integrantes.
-- Entregar os links do site e do GitHub, mais uma captura do site aberto no celular da dupla.
+- `src/lessons/` reúne o conteúdo e os laboratórios por tema.
+- `src/components/` guarda os componentes compartilhados, incluindo a navegação das lições e os blocos de código.
+- `src/views/` contém a abertura do guia, o contêiner das lições e o Desafio.
+- `src/router/` define as rotas, e `src/stores/` guarda o progresso da trilha.
+- `public/imagens/` contém as versões da paisagem usadas no exemplo de `srcset`.

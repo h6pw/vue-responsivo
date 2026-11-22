@@ -11,10 +11,12 @@ const initialAnimals = () => [
   { id: 'p3', nome: 'Papagaio 🦜', cor: '#e9c46a' },
 ]
 const animalList = ref(initialAnimals())
+const revision = ref(0)
 const removedAnimalName = ref('')
 const bugNotice = ref('')
 
 function resetAnimals() {
+  revision.value++
   animalList.value = initialAnimals()
   removedAnimalName.value = ''
   bugNotice.value = ''
@@ -28,10 +30,10 @@ function removeFirstAnimal() {
 
   if (!useKey.value) {
     bugNotice.value =
-      'Observe o que aconteceu com o texto digitado! Como não usamos :key, o Vue atualizou os elementos DOM in-place: o nó DOM do primeiro item foi reaproveitado para exibir o Gato, herdando qualquer texto que já estava no primeiro input, enquanto o último nó DOM foi descartado.'
+      'Sem chave, os campos continuam nas mesmas posições. Se você digitou no segundo campo antes de remover o Cachorro, o texto aparece agora na linha do Papagaio.'
   } else {
     bugNotice.value =
-      'Excelente! Com :key="animal.id", o Vue identificou com exatidão qual nó pertencia ao Cachorro e removeu o elemento DOM correto, preservando os campos dos demais animais intactos!'
+      'Com uma chave estável, o texto acompanha o animal mesmo quando ele muda de posição.'
   }
 }
 
@@ -184,7 +186,7 @@ const demoStyles = computed(() => ({
       </dl>
 
       <!-- Lista interativa de animais -->
-      <div class="animals-stage">
+      <div :key="revision" class="animals-stage">
         <div v-if="animalList.length === 0" class="empty-state">
           <p>
             Todos os animais foram removidos. Clique em "Restaurar lista" para recomeçar o teste.
@@ -411,10 +413,13 @@ const demoStyles = computed(() => ({
 
 <style scoped>
 .vue-lab {
+  overflow-wrap: anywhere;
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--space-4);
 }
 .lab-view {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--space-4);
 }
 .lab-instruction-card {
@@ -449,6 +454,7 @@ const demoStyles = computed(() => ({
 }
 .action-buttons-group {
   display: flex;
+  flex-wrap: wrap;
   gap: var(--space-2);
 }
 .action-btn {
@@ -488,6 +494,7 @@ const demoStyles = computed(() => ({
   margin: 0;
   padding: 0;
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--space-3);
 }
 .animal-row {
@@ -504,6 +511,8 @@ const demoStyles = computed(() => ({
 }
 .animal-info {
   display: flex;
+  flex-wrap: wrap;
+  min-inline-size: 0;
   align-items: center;
   gap: var(--space-2);
 }
@@ -527,10 +536,12 @@ const demoStyles = computed(() => ({
 }
 .animal-input-wrap {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: var(--space-2);
   flex: 1;
-  min-width: 16rem;
+  min-inline-size: 0;
+  flex-basis: min(100%, 16rem);
 }
 .animal-input-wrap label {
   font-size: 0.8rem;
@@ -538,6 +549,8 @@ const demoStyles = computed(() => ({
   white-space: nowrap;
 }
 .animal-input {
+  min-inline-size: 0;
+  max-inline-size: 100%;
   flex: 1;
   padding: var(--space-2);
   background: var(--night);

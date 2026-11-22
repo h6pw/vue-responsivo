@@ -1,5 +1,6 @@
 <script setup>
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, onUnmounted, ref } from 'vue'
+import { imageSources, imageSizes } from './imagesExample'
 
 const activeTab = ref('cls') // 'cls' | 'object-fit' | 'srcset'
 
@@ -30,6 +31,8 @@ onMounted(() => {
   reloadClsSimulation()
 })
 
+onUnmounted(() => clearTimeout(timerId))
+
 // --- ABA 2: Object-fit & Aspect-ratio ---
 const selectedObjectFit = ref('cover')
 const selectedAspectRatio = ref('16 / 9')
@@ -56,38 +59,17 @@ const displayDensity = ref(1) // 1x ou 2x
 const effectiveTargetWidth = computed(() => {
   // Se viewport >= 768px (48rem), imagem ocupa 50vw; senão 100vw
   const containerFraction = simulatedViewport.value >= 768 ? 0.5 : 1.0
-  const renderedPixels = simulatedViewport.value * containerFraction
+  const renderedPixels =
+    simulatedViewport.value >= 768
+      ? Math.min(simulatedViewport.value * containerFraction, 512)
+      : simulatedViewport.value
   return Math.round(renderedPixels * displayDensity.value)
 })
 
-const selectedSource = computed(() => {
-  const req = effectiveTargetWidth.value
-  if (req <= 440) {
-    return {
-      file: 'paisagem-400.webp',
-      width: '400w',
-      sizeKb: 38,
-      savedKb: 142,
-      tier: 'Celular / Resolução baixa',
-    }
-  }
-  if (req <= 850) {
-    return {
-      file: 'paisagem-800.webp',
-      width: '800w',
-      sizeKb: 92,
-      savedKb: 88,
-      tier: 'Tablet / Celular HiDPI',
-    }
-  }
-  return {
-    file: 'paisagem-1200.webp',
-    width: '1200w',
-    sizeKb: 180,
-    savedKb: 0,
-    tier: 'Desktop / Tela de alta densidade',
-  }
-})
+const selectedSource = computed(
+  () =>
+    imageSources.find(({ width }) => width >= effectiveTargetWidth.value) ?? imageSources.at(-1),
+)
 </script>
 
 <template>
@@ -155,19 +137,7 @@ const selectedSource = computed(() => {
         <div>
           <dt>Reserva de espaço</dt>
           <dd :class="hasDimensions ? 'text-good' : 'text-bad'">
-            {{ hasDimensions ? '3:2 reservado (240px)' : 'Nenhuma (0px inicial)' }}
-          </dd>
-        </div>
-        <div>
-          <dt>Métrica CLS estimada</dt>
-          <dd :class="hasDimensions ? 'text-good' : 'text-bad'">
-            {{
-              hasDimensions
-                ? '0.00 (Perfeito)'
-                : shiftDetected
-                  ? '0.28 (Ruim · Reprovado)'
-                  : 'Calculando...'
-            }}
+            {{ hasDimensions ? 'Proporção 3:2 reservada' : 'Nenhuma (0px inicial)' }}
           </dd>
         </div>
         <div>
@@ -213,7 +183,7 @@ const selectedSource = computed(() => {
               <!-- Placeholder visível quando há dimensões reservadas -->
               <div v-if="hasDimensions && !imageLoaded" class="reservation-ghost">
                 <span class="ghost-icon">🖼️</span>
-                <span>Espaço de 240px já reservado pelo navegador</span>
+                <span>Espaço reservado na proporção 3:2</span>
               </div>
 
               <!-- A imagem simulada (aparece após o atraso de rede) -->
@@ -250,9 +220,7 @@ const selectedSource = computed(() => {
 
             <!-- Alerta visual de salto quando acontece -->
             <div v-if="shiftDetected && !hasDimensions" class="shift-banner" role="alert">
-              <span class="shift-arrow"
-                >⬇ O texto pulou 240 pixels para baixo quando a imagem chegou!</span
-              >
+              <span class="shift-arrow">⬇ O texto mudou de posição quando a imagem apareceu!</span>
               <small>Isso causa cliques acidentais e frustração em quem estava lendo.</small>
             </div>
 
@@ -371,74 +339,49 @@ const selectedSource = computed(() => {
       <dl class="lesson-lab-readout">
         <div>
           <dt>Regra do sizes</dt>
-          <dd>{{ simulatedViewport >= 768 ? '50vw (metade da tela)' : '100vw (tela cheia)' }}</dd>
+          <dd>{{ simulatedViewport >= 768 ? '50vw, até 32rem' : '100vw (tela cheia)' }}</dd>
         </div>
         <div>
-          <dt>Pixels reais requeridos</dt>
+          <dt>Largura estimada para a densidade</dt>
           <dd>{{ effectiveTargetWidth }} px ({{ displayDensity }}x)</dd>
         </div>
         <div>
-          <dt>Arquivo selecionado</dt>
+          <dt>Candidato na simulação</dt>
           <dd class="text-mint">
             <strong>{{ selectedSource.file }}</strong>
           </dd>
         </div>
-        <div>
-          <dt>Economia de dados</dt>
-          <dd class="text-good">
-            {{
-              selectedSource.savedKb > 0
-                ? '-' +
-                  selectedSource.savedKb +
-                  ' KB (-' +
-                  Math.round((selectedSource.savedKb / 180) * 100) +
-                  '%)'
-                : 'Resolução máxima (180 KB)'
-            }}
-          </dd>
-        </div>
       </dl>
 
+      <p class="lesson-lab-note">
+        O simulador indica a menor largura que atende à estimativa, ou a maior disponível. Na prévia
+        abaixo, o navegador escolhe de verdade para a janela e a densidade do seu aparelho. Ele
+        também pode considerar condições como cache.
+      </p>
+      <div class="lesson-lab-stage">
+        <img
+          class="actual-srcset"
+          :src="imageSources[1].url"
+          :srcset="imageSources.map(({ url, width }) => url + ' ' + width + 'w').join(', ')"
+          :sizes="imageSizes"
+          width="1200"
+          height="800"
+          alt="Ilustração de montanhas ao entardecer"
+          loading="lazy"
+        />
+      </div>
       <div class="srcset-cards-grid">
-        <div class="srcset-card" :class="{ 'is-chosen': selectedSource.width === '400w' }">
+        <div
+          v-for="source in imageSources"
+          :key="source.width"
+          class="srcset-card"
+          :class="{ 'is-chosen': selectedSource.width === source.width }"
+        >
           <header>
-            <span class="file-tag">400w</span>
-            <strong>paisagem-400.webp</strong>
+            <span class="file-tag">{{ source.width }}w</span><strong>{{ source.file }}</strong>
           </header>
-          <div class="file-info">
-            <p>Tamanho: <strong>38 KB</strong></p>
-            <p>Ideal para celulares com telas padrão.</p>
-          </div>
-          <span v-if="selectedSource.width === '400w'" class="badge-active"
-            >✓ Escolhida pelo navegador</span
-          >
-        </div>
-
-        <div class="srcset-card" :class="{ 'is-chosen': selectedSource.width === '800w' }">
-          <header>
-            <span class="file-tag">800w</span>
-            <strong>paisagem-800.webp</strong>
-          </header>
-          <div class="file-info">
-            <p>Tamanho: <strong>92 KB</strong></p>
-            <p>Ideal para tablets ou celulares com tela 2x.</p>
-          </div>
-          <span v-if="selectedSource.width === '800w'" class="badge-active"
-            >✓ Escolhida pelo navegador</span
-          >
-        </div>
-
-        <div class="srcset-card" :class="{ 'is-chosen': selectedSource.width === '1200w' }">
-          <header>
-            <span class="file-tag">1200w</span>
-            <strong>paisagem-1200.webp</strong>
-          </header>
-          <div class="file-info">
-            <p>Tamanho: <strong>180 KB</strong></p>
-            <p>Ideal para monitores grandes e telas retina de alta resolução.</p>
-          </div>
-          <span v-if="selectedSource.width === '1200w'" class="badge-active"
-            >✓ Escolhida pelo navegador</span
+          <span v-if="selectedSource.width === source.width" class="badge-active"
+            >Candidato na simulação</span
           >
         </div>
       </div>
@@ -661,7 +604,7 @@ const selectedSource = computed(() => {
 }
 .slider-cluster {
   flex: 1;
-  min-width: 15rem;
+  min-width: min(100%, 15rem);
 }
 .slider-cluster input[type='range'] {
   flex: 1;
@@ -712,6 +655,16 @@ const selectedSource = computed(() => {
 }
 
 /* ABA 3 */
+.actual-srcset {
+  display: block;
+  width: min(100%, 32rem);
+  height: auto;
+}
+@media (min-width: 48rem) {
+  .actual-srcset {
+    width: min(100%, 50vw, 32rem);
+  }
+}
 .srcset-cards-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
