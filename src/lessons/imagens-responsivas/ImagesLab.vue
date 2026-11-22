@@ -2,6 +2,12 @@
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { imageSources, imageSizes } from './imagesExample'
 
+const browserChoice = ref('')
+
+function recordBrowserChoice(event) {
+  browserChoice.value = event.currentTarget.currentSrc.split('/').at(-1)
+}
+
 const activeTab = ref('cls') // 'cls' | 'object-fit' | 'srcset'
 
 // --- ABA 1: CLS / Salto de Layout ---
@@ -354,13 +360,15 @@ const selectedSource = computed(
       </dl>
 
       <p class="lesson-lab-note">
-        O simulador indica a menor largura que atende à estimativa, ou a maior disponível. Na prévia
-        abaixo, o navegador escolhe de verdade para a janela e a densidade do seu aparelho. Ele
-        também pode considerar condições como cache.
+        As três versões mostram a mesma paisagem e têm o mesmo enquadramento. Só muda a resolução do
+        arquivo. O simulador indica a menor largura que atende à estimativa, ou a maior disponível.
+        Na prévia abaixo, o navegador escolhe de verdade para a janela e a densidade do seu
+        aparelho. Ele também pode considerar condições como cache.
       </p>
       <div class="lesson-lab-stage">
         <img
           class="actual-srcset"
+          @load="recordBrowserChoice"
           :src="imageSources[1].url"
           :srcset="imageSources.map(({ url, width }) => url + ' ' + width + 'w').join(', ')"
           :sizes="imageSizes"
@@ -370,6 +378,9 @@ const selectedSource = computed(
           loading="lazy"
         />
       </div>
+      <p v-if="browserChoice" class="lesson-lab-note" aria-live="polite">
+        Arquivo carregado neste navegador: <strong>{{ browserChoice }}</strong>
+      </p>
       <div class="srcset-cards-grid">
         <div
           v-for="source in imageSources"

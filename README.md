@@ -13,7 +13,7 @@ Projeto acadêmico em dupla para estudar como páginas web se adaptam a diferent
 | Flexbox e Grid       | Ajuste alinhamento, quebra de linha, largura e espaçamento enquanto acompanha o CSS aplicado.                               |
 | Imagens responsivas  | Compare a reserva de espaço, explore recortes e teste como `srcset` oferece diferentes resoluções.                          |
 | Boas práticas em Vue | Veja o efeito de `:key` nos campos de uma lista, explore Core Web Vitals e experimente os efeitos de alterar design tokens. |
-| Desafio final        | Responda a três questões dos laboratórios e confira a pontuação e as explicações.                                           |
+| Desafio final        | Responda a cinco questões com diagramas, uma por módulo e confira a pontuação e as explicações.                             |
 
 ## Tecnologias
 

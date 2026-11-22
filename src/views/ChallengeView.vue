@@ -1,26 +1,59 @@
 <script setup>
 import { computed, ref } from 'vue'
 import { RouterLink } from 'vue-router'
+import ChallengeFigure from '@/components/ChallengeFigure.vue'
 
 const questions = [
   {
-    id: 1,
+    id: 'responsividade',
+    topic: 'Responsividade',
+    title: 'A largura que o CSS recebe',
+    question:
+      'No laboratório, você escolhe Celular e desliga a meta viewport. Qual largura o CSS passa a usar e como o catálogo fica?',
+    hint: 'A regra de 640 px consulta o viewport CSS.',
+    options: [
+      { text: '390 px, com três colunas.', correct: false },
+      { text: '980 px, com uma coluna.', correct: false },
+      { text: '980 px, com três colunas.', correct: true },
+      { text: '640 px, com duas colunas.', correct: false },
+    ],
+    explanation:
+      'Nesse simulador, o CSS recebe 980 px sem a meta viewport. Como 980 supera o breakpoint de 640 px, o catálogo passa a ter três colunas e é reduzido para caber na tela.',
+  },
+  {
+    id: 'unidades-css',
+    topic: 'Unidades CSS',
+    title: 'O título que acompanha a fonte',
+    question:
+      'No modo Tipografia, você ajusta a raiz de 16 para 20 px. Qual é o tamanho final de cada título?',
+    hint: 'Calcule 1,5 vezes o novo tamanho da raiz.',
+    options: [
+      { text: '24 px no título em px e 30 px no título em rem.', correct: true },
+      { text: '30 px nos dois títulos.', correct: false },
+      { text: '24 px nos dois títulos.', correct: false },
+      { text: '20 px no título em px e 24 px no título em rem.', correct: false },
+    ],
+    explanation:
+      'O tamanho de 24px é fixo em pixels CSS. O título em 1.5rem passa a medir 1,5 × 20 = 30 px.',
+  },
+  {
+    id: 'flexbox-grid',
     topic: 'Laboratório de Grid',
     title: 'Virada para 3 Colunas no Catálogo',
     question:
       'No nosso laboratório de Grid (com repeat(auto-fit, minmax(14rem, 1fr)), gap de 1rem e 1rem = 16px), a partir de qual largura interna do contêiner os 3 cartões cabem juntos na mesma linha (3 colunas)?',
     hint: 'Dica: cada coluna precisa de 14rem (224px) e existem 2 vãos (gaps) de 16px entre 3 colunas. Faça a soma!',
     options: [
-      { text: '688 px (três colunas e apenas um vão)', correct: false },
-      { text: '704 px (224 + 16 + 224 + 16 + 224)', correct: true },
-      { text: '672 px (apenas 3 colunas sem os vãos)', correct: false },
-      { text: '720 px (com margens externas adicionais)', correct: false },
+      { text: '688 px', correct: false },
+      { text: '704 px', correct: true },
+      { text: '672 px', correct: false },
+      { text: '720 px', correct: false },
     ],
     explanation:
-      'Correto! 3 colunas de 224px = 672px. Entre 3 colunas existem 2 vãos de 16px = 32px. 672 + 32 = 704 px!',
+      'Três colunas de 224px = 672px. Entre 3 colunas existem 2 vãos de 16px = 32px. 672 + 32 = 704 px!',
   },
   {
-    id: 2,
+    id: 'imagens-responsivas',
     topic: 'Laboratório de Imagens',
     title: 'Eliminando o Salto de Layout',
     question:
@@ -36,26 +69,26 @@ const questions = [
       { text: 'Retirar os atributos width e height para deixar a imagem livre', correct: false },
     ],
     explanation:
-      'Perfeito! Com width e height no HTML, o navegador calcula o proporção indicada pelas dimensões e reserva espaço antes da imagem chegar. Os atributos devem corresponder à proporção do arquivo.',
+      'Com width e height no HTML, o navegador calcula a proporção indicada pelas dimensões e reserva espaço antes da imagem chegar. Os atributos devem corresponder à proporção do arquivo.',
   },
   {
-    id: 3,
+    id: 'boas-praticas-vue',
     topic: 'Laboratório de Boas Práticas Vue',
     title: 'O Enigma do :key no v-for',
     question:
-      'Ao remover o primeiro item de uma lista com inputs de texto renderizada com v-for sem :key, por que, no laboratório, a anotação digitada no campo do Gato aparece na linha do Papagaio?',
+      'No laboratório, você digita “vacina” no campo do Gato e remove o Cachorro com a opção de chave desligada. Onde fica a anotação?',
     hint: 'Lembre-se da estratégia in-place patch do Virtual DOM.',
     options: [
       {
-        text: 'Porque o Vue reaproveitou os campos por posição. O segundo campo conservou o texto e passou a exibir o Papagaio.',
+        text: 'No campo do Papagaio, que agora ocupa a segunda posição.',
         correct: true,
       },
-      { text: 'Porque o JavaScript perdeu a referência da memória RAM', correct: false },
-      { text: 'Porque o v-model do Vue sobrescreve o DOM automaticamente', correct: false },
-      { text: 'Porque os inputs de texto não suportam navegadores modernos', correct: false },
+      { text: 'No campo do Gato, que sobe para a primeira posição.', correct: false },
+      { text: 'Nos dois campos restantes.', correct: false },
+      { text: 'A anotação é apagada junto com a linha do Cachorro.', correct: false },
     ],
     explanation:
-      'Exato! Sem uma chave única estável, o Vue usa atualização in-place: reaproveita os nós DOM existentes por índice, causando inconsistências em campos de formulário.',
+      'Sem uma chave estável, o Vue reaproveita os campos por posição. O segundo campo mantém seu texto, mas passa a ser exibido na linha do Papagaio.',
   },
 ]
 
@@ -102,7 +135,7 @@ const isAllCompleted = computed(() => {
       </p>
     </header>
 
-    <div class="score-banner">
+    <div class="score-banner" aria-live="polite">
       <div>
         <span class="score-title">Pontuação do Desafio</span>
         <strong class="score-number">{{ totalCorrect }} / {{ questions.length }}</strong>
@@ -112,7 +145,10 @@ const isAllCompleted = computed(() => {
         <span class="badge-star">🏆</span>
         <div>
           <strong>Parabéns! Desafio Concluído!</strong>
-          <p>Você respondeu às três questões. Confira o resultado e revise as explicações.</p>
+          <p>
+            Você respondeu às {{ questions.length }} questões. Confira o resultado e revise as
+            explicações.
+          </p>
         </div>
       </div>
     </div>
@@ -133,7 +169,11 @@ const isAllCompleted = computed(() => {
         </header>
 
         <p class="question-text">{{ q.question }}</p>
-        <p class="question-hint">💡 {{ q.hint }}</p>
+        <ChallengeFigure :lesson="q.id" />
+        <details class="question-hint">
+          <summary>Ver dica</summary>
+          <p>{{ q.hint }}</p>
+        </details>
 
         <div class="options-group" role="group" :aria-label="q.title">
           <button
@@ -186,6 +226,9 @@ const isAllCompleted = computed(() => {
             }}
           </strong>
           <p>{{ q.explanation }}</p>
+          <RouterLink class="review-link" :to="{ name: q.id, hash: '#exemplo' }"
+            >Rever o laboratório</RouterLink
+          >
         </div>
       </article>
     </section>
@@ -256,6 +299,8 @@ const isAllCompleted = computed(() => {
   gap: var(--space-5);
 }
 .question-card {
+  grid-template-columns: minmax(0, 1fr);
+  overflow-wrap: anywhere;
   padding: var(--space-4);
   background: var(--night);
   border: var(--line) solid var(--slate);
@@ -288,6 +333,13 @@ const isAllCompleted = computed(() => {
   line-height: 1.6;
   color: var(--text);
   font-size: 0.95rem;
+}
+.review-link {
+  color: inherit;
+  text-decoration: underline;
+}
+.question-hint summary {
+  cursor: pointer;
 }
 .question-hint {
   font-size: 0.85rem;
